@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food page</title>
+    {% extends 'topBar.html' %}
+    {% load static %}
+</head>
+<body>
+{% block content %}
+    <div class="food_cards">
+        {% for product in products %}
+            <div class="card" style="width: 18rem;">
+              <img class="card-img-top" src="/{{product.image}}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <a href="{% url 'single_product_info' food_category_id=food_category.id food_type_id=food_type.id product_id=product.id %}"
+                   class="btn btn-primary">К описанию</a>
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+</body>
+</html>

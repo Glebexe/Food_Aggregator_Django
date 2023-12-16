@@ -1,0 +1,90 @@
+body{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+}
+body .title{
+    margin-top: 70px;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+}
+
+.img .card-img-top{
+    border-radius: 10px;
+}
+
+.container .description_panel{
+    margin-left: 30px;
+    width: 100%;
+    background: #a9d9f3;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+form{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-right: 20px;
+    z-index: -1;
+}
+
+.comments .top{
+    display: flex;
+}
+
+.comments .top .datetime{
+    position: absolute;
+    right: 0;
+}
+
+.comments .comment{
+    margin-top: 10px;
+    display: flex;
+}
+
+.line{
+    background: #b2b2b2;
+    height: 1px;
+    width: 100%;
+}
+
+i{
+    position: absolute;
+    right: 0;
+}
+
+i:hover{
+    color: #999999;
+}
+
+@media (max-width: 990px) {
+    .container{
+        display: flex;
+        flex-direction: column;
+    }
+    .container .description_panel {
+        margin-left: 0;
+    }
+}
+@media (max-width: 940px) {
+    body .title{
+        width: 500px;
+    }
+}

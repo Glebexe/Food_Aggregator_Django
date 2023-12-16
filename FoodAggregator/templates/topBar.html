@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/foodCategories.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/productsOfType.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/singleProductInfo.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/topBar.css' %}"/>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+          <div class="navigation">
+              <a href="javascript:history.go(-1)">
+                <h4>Назад</h4>
+              </a>
+              <div class="vertical_line"></div>
+              <a href="{% url 'main_menu' %}">
+                <h4>Главное меню</h4>
+              </a>
+          </div>
+          <a href="{% url 'logout' %}">
+            <button class="btn btn-outline-danger me-2" type="button">Выход</button>
+          </a>
+        </nav>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

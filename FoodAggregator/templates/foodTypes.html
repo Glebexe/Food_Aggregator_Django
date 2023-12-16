@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% extends 'topBar.html' %}
+    {% load static %}
+</head>
+<body>
+{% block content %}
+    <div class="shops">
+        <h2>Выберите тип продукта</h2>
+        <ul>
+            {% for type in food_types %}
+                <a href={% url 'products' food_category_id=category_id food_type_id=type.id %}>
+                    <li>
+                        {{ type }}
+                    </li>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+</body>
+</html>

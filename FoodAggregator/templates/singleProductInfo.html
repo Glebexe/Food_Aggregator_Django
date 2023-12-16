@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Full Food Info</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    {% extends 'topBar.html' %}
+    {% load static %}
+    {% load crispy_forms_tags %}
+</head>
+<body>
+{% block content %}
+    <div class="title">
+        <h1>{{ product_description.name }}</h1>
+    </div>
+    <div class="container">
+        <div class="img">
+            <img class="card-img-top" src="/{{product_description.image}}">
+        </div>
+        <div class="description_panel">
+            <div class="description">
+                <h4>О товаре:</h4>
+                {{ product_description.description }}
+            </div>
+            <div class="ingredients">
+                <h4>Состав:</h4>
+                {{ product_description.ingredients }}
+            </div>
+            <div class="weight">
+                <h4>Вес:</h4>
+                {{ product_description.weight }}кг.
+            </div>
+
+            <div class="price">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Магазин</th>
+                      <th scope="col">Цена</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                        {% for instance in instances_of_product %}
+                            <tr>
+                                <td>{{ instance.shop.name }}</td>
+                                <td>{{ instance.price }}р.</td>
+                            </tr>
+                        {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="comments">
+        <h3>Отзывы</h3>
+        {% for comment in comments %}
+            <div><br>Пользователь: {{ comment.user }}<br></div>
+            <div class="top">
+                <div>Оценка: {{ comment.mark }}</div>
+                <div class="datetime">{{ comment.datetime| date:'d N H:i' }}</div>
+            </div>
+            <div class="comment">
+                <span>{{ comment.comment }}</span>
+                {% if is_moderator %}
+                    <a href="{% url 'delete_comment' food_category_id food_type_id product_description.id comment.id %}">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                {% endif %}
+            </div>
+            <div class="line"></div>
+        {% endfor %}
+    </div>
+    {% if not is_authenticated %}
+        <br><br><h2>Чтобы оставить отзыв ввойдите в ваш аккаунт</h2>
+    {% elif is_in_blacklist %}
+        <br><br><h2>Вы нарушили правила площадки и теперь не можете оставлять комментарии</h2>
+    {% else %}
+        <form action="{{ product_description.id }}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit">
+        </form>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

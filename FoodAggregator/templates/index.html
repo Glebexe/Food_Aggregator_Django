@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}"/>
+</head>
+<body>
+
+<section class="forms-section">
+  <h1 class="section-title"></h1>
+  <div class="forms">
+    <div class="form-wrapper is-active">
+      <button type="button" class="switcher switcher-login">
+        Login
+        <span class="underline"></span>
+      </button>
+      <form class="form form-login" method="post">
+          {% csrf_token %}
+        <fieldset>
+          <legend>Please, enter your nickname and password for login.</legend>
+          <div class="input-block">
+            <label for="login-nickname">Nickname</label>
+            <input id="login-nickname" name="nickname" required>
+          </div>
+          <div class="input-block">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" required>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn-login">Login</button>
+      </form>
+    </div>
+    <div class="form-wrapper">
+      <button type="button" class="switcher switcher-signup">
+        Sign Up
+        <span class="underline"></span>
+      </button>
+      <form id='register_form' class="form form-signup" method="post">
+          {% csrf_token %}
+        <fieldset>
+          <legend>Please, enter nickname, email, password and password confirmation for sign up.</legend>
+          <div class="input-block">
+            <label for="signup-nickname">Nickname</label>
+            <input id="signup-nickname" name="create_nickname" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-email">E-mail</label>
+            <input id="signup-email" name="create_email" type="email" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-password">Password</label>
+            <input id="signup-password" name="create_password" type="password" required>
+          </div>
+          <div class="input-block">
+            <label for="signup-password-confirm">Confirm password</label>
+            <input id="signup-password-confirm" name="conf_password" type="password" required>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn-signup" id="submit_btn">Continue</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% block javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+    let nicknameError = false;
+    let emailError = false;
+    let passwordError = false;
+
+    $(document).ready(function (){
+        $('#signup-nickname').keyup(function (){
+            $.ajax({
+                data:$(this).serialize(),
+                url: "{% url 'validate_username' %}",
+                success: function (response){
+                    if($('#usernameError').length == 0)
+                        $('#signup-nickname').after('<div class="invalid-feedback d-block" id="usernameError"></div>');
+
+                    if(response.name_is_taken) {
+                        $('#signup-nickname').removeClass('is-valid').addClass('is-invalid');
+                        $('#usernameError').removeClass('valid-feedback').addClass('invalid-feedback').text("Такое имя пользователя уже существует");
+                        nicknameError = true;
+                    }else {
+                        $('#signup-nickname').removeClass('is-invalid').addClass('is_valid');
+                        $('#usernameError').removeClass('invalid-feedback').addClass('valid-feedback').text("Такое имя пользователя доступно");
+                        nicknameError = false;
+                    }
+
+                    if(nicknameError || emailError || passwordError)
+                        $('#submit_btn').prop('disabled', true)
+                    else
+                        $('#submit_btn').prop('disabled', false)
+                },
+                error: function (response){
+                    console.log(response.responseJSON.errors)
+                }
+            });
+            return false;
+        })
+        $('#signup-email').keyup(function (){
+            $.ajax({
+                data:$(this).serialize(),
+                url: "{% url 'validate_email' %}",
+                success: function (response){
+
+                    if($('#emailError').length == 0)
+                        $('#signup-email').after('<div class="invalid-feedback d-block" id="emailError"></div>');
+
+                    if(response.email_is_taken) {
+                        $('#signup-email').removeClass('is-valid').addClass('is-invalid');
+                        $('#emailError').removeClass('valid-feedback').addClass('invalid-feedback').text("Такая почта уже занята");
+                        emailError = true;
+                    }else {
+                        $('#signup-email').removeClass('is-invalid').addClass('is_valid');
+                        $('#emailError').removeClass('invalid-feedback').addClass('valid-feedback').text("Такая почта доступна");
+                        emailError = false;
+                    }
+
+                    if(nicknameError || emailError || passwordError)
+                        $('#submit_btn').prop('disabled', true)
+                    else
+                        $('#submit_btn').prop('disabled', false)
+                },
+                error: function (response){
+                    console.log(response.responseJSON.errors)
+                }
+            });
+            return false;
+        })
+        $('#register_form .input-block input:password').keyup(function (){
+                $.ajax({
+                    data:$(this).serialize(),
+                    url: "{% url 'validate_password' %}",
+                    success: function (response){
+                        if($('#passwordError').length == 0)
+                            $('#signup-password-confirm').after('<div class="invalid-feedback d-block" id="passwordError"></div>');
+
+                        if(response.passwords_are_identical) {
+                            $('#signup-password-confirm').removeClass('is-invalid').addClass('is_valid');
+                            $('#passwordError').removeClass('invalid-feedback').addClass('valid-feedback').text("Пароль доступен");
+                            passwordError = false;
+                        }else {
+                            $('#signup-password-confirm').removeClass('is-valid').addClass('is-invalid');
+                            $('#passwordError').removeClass('valid-feedback').addClass('invalid-feedback').text("Пароли не совпадают");
+                            passwordError = true;
+                        }
+
+                        if(nicknameError || emailError || passwordError)
+                            $('#submit_btn').prop('disabled', true)
+                        else
+                            $('#submit_btn').prop('disabled', false)
+                    },
+                    error: function (response){
+                        console.log(response.responseJSON.errors)
+                    }
+                });
+                return false;
+        })
+    })
+
+    </script>
+{% endblock %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js'></script>
+<script src="{% static 'js/index.js' %}"></script>
+
+</body>
+</html>

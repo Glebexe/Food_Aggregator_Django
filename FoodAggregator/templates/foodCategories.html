@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab4</title>
+    {% extends 'topBar.html' %}
+    {% load static %}
+</head>
+<body>
+{% block content %}
+    <div class="shops">
+        <h2>Выберите категорию продукта</h2>
+        <ul>
+            {% for category in categories %}
+                <a href={% url 'food_types' food_category_id=category.id %}>
+                    <li>
+                        {{ category }}
+                    </li>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+</body>
+</html>

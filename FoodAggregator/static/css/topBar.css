@@ -1,0 +1,28 @@
+a{
+    margin-right: 0px;
+    margin-left: auto;
+}
+.navbar{
+    position: relative;
+    z-index: 1;
+}
+
+.navigation{
+
+    display: flex;
+    align-items: center;
+}
+
+.navigation .vertical_line{
+    width: 1px;
+    height: 40px;
+    background: #a1b4b4;
+    margin-left: 30px;
+}
+
+.navigation a{
+    text-decoration: none;
+    color: #45a6e2;
+    margin-left: 30px;
+    margin-top: 5px;
+}
